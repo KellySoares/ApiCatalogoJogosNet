@@ -31,8 +31,5 @@ $ dotnet run
 ```
 
 ✨ Telas do aplicativo web
+![image](https://user-images.githubusercontent.com/56278384/144320734-868725e8-c8ff-431c-a163-a415f8ac95f8.png)
 
-```bash
-![image](https://user-images.githubusercontent.com/56278384/144320606-e7a31dfa-3afe-4654-a9e9-d89e6711cd01.png)
-
-```
