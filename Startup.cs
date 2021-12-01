@@ -16,6 +16,7 @@ using ApiCatalogoJogos.Controllers.V1;
 using ApiCatalogoJogos.Repository;
 using ApiCatalogoJogos.Services;
 
+
 namespace ApiCatalogoJogos
 {
     public class Startup

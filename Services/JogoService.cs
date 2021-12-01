@@ -1,11 +1,12 @@
-using ApiCatalogoJogos.InputModel;
-using ApiCatalogoJogos.Repository;
-using ApiCatalogoJogos.ViewModel;
-using ApiCatalogoJogos.Entities;										 
+
 using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ApiCatalogoJogos.InputModel;
+using ApiCatalogoJogos.Repository;
+using ApiCatalogoJogos.ViewModel;
+using ApiCatalogoJogos.Entities;
 
 
 namespace ApiCatalogoJogos.Services
@@ -19,22 +20,21 @@ namespace ApiCatalogoJogos.Services
             _jogoRepository = jogoRepository;
         }
 
-
-        public async  Task<List<JogoViewModel>> Obter(int pagina, int quantidade)
+        public async Task<List<JogoViewModel>> Obter(int pagina, int quantidade)
         {
             var jogos = await _jogoRepository.Obter(pagina, quantidade);
 
             return jogos.Select(jogo => new JogoViewModel
-                                {
-                                    Id = jogo.Id,
-                                    Nome = jogo.Nome,
-                                    Produtora = jogo.Produtora,
-                                    Preco = jogo.Preco
-                                })
+            {
+                Id = jogo.Id,
+                Nome = jogo.Nome,
+                Produtora = jogo.Produtora,
+                Preco = jogo.Preco
+            })
                                .ToList();
         }
 
-        
+
         public async Task Atualizar(Guid id, JogoInputModel jogo)
         {
             var entidadeJogo = await _jogoRepository.Obter(id);
