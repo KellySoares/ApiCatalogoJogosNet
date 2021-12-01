@@ -30,10 +30,9 @@ namespace ApiCatalogoJogos.Controllers.V1
         public async Task<ActionResult<IEnumerable<JogoViewModel>>> Obter([FromQuery, Range(1, int.MaxValue)] int pagina = 1, [FromQuery, Range(1, 50)] int quantidade = 5)
         {
             var jogos = await _jogoService.Obter(pagina, quantidade);
+
             if (jogos.Count() == 0)
-            {
                 return NoContent();
-            }
 
             return Ok(jogos);
 
@@ -42,12 +41,11 @@ namespace ApiCatalogoJogos.Controllers.V1
         public async Task<ActionResult<JogoViewModel>> Obter([FromRoute] Guid idjogo)
         {
             var jogo = await _jogoService.Obter(idjogo);
-            if (jogo == null)
-            {
-                return NoContent(jogo);
 
-            }
-            return Ok();
+            if (jogo == null)
+                return NoContent();
+
+            return Ok(jogo);
 
         }
 
@@ -62,7 +60,7 @@ namespace ApiCatalogoJogos.Controllers.V1
             //catch (JogoJaCadastadoException ex)
             catch (Exception ex)
             {
-                return UnprocessableEntity("Já existe um jogo com este nome para esta produtora");
+                return UnprocessableEntity("Já existe um jogo com este nome para esta produtora" + ex);
             }
 
 
@@ -78,7 +76,7 @@ namespace ApiCatalogoJogos.Controllers.V1
             }
             catch (Exception ex)
             {
-                return NotFound("Não existe este jogo");
+                return NotFound("Não existe este jogo" + ex);
             }
 
 
@@ -94,7 +92,7 @@ namespace ApiCatalogoJogos.Controllers.V1
             }
             catch (Exception ex)
             {
-                return NotFound("Não existe este jogo");
+                return NotFound("Não existe este jogo" + ex);
             }
 
         }
@@ -105,12 +103,12 @@ namespace ApiCatalogoJogos.Controllers.V1
         {
             try
             {
-                await _jogoService.Atualizar(idJogo);
+                await _jogoService.Remover(idJogo);
                 return Ok();
             }
             catch (Exception ex)
             {
-                return NotFound("Não existe este jogo");
+                return NotFound("Não existe este jogo" + ex);
             }
 
         }

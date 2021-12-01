@@ -1,8 +1,9 @@
+using ApiCatalogoJogos.InputModel;
+using ApiCatalogoJogos.ViewModel;										 								
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ApiCatalogoJogos.InputModel;
-using ApiCatalogoJogos.ViewModel;
+
 
 namespace ApiCatalogoJogos.Services
 {

@@ -1,9 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using ApiCatalogoJogos.InputModel;
 using ApiCatalogoJogos.Repository;
 using ApiCatalogoJogos.ViewModel;
+using ApiCatalogoJogos.Entities;										 
+using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 
 namespace ApiCatalogoJogos.Services
 {
@@ -17,45 +20,99 @@ namespace ApiCatalogoJogos.Services
         }
 
 
-        public Task<List<JogoViewModel>> Obter(int pagina, int quantidade)
+        public async  Task<List<JogoViewModel>> Obter(int pagina, int quantidade)
         {
             var jogos = await _jogoRepository.Obter(pagina, quantidade);
 
             return jogos.Select(jogo => new JogoViewModel
+                                {
+                                    Id = jogo.Id,
+                                    Nome = jogo.Nome,
+                                    Produtora = jogo.Produtora,
+                                    Preco = jogo.Preco
+                                })
+                               .ToList();
+        }
+
+        
+        public async Task Atualizar(Guid id, JogoInputModel jogo)
+        {
+            var entidadeJogo = await _jogoRepository.Obter(id);
+
+            if (entidadeJogo == null)
+                throw new System.Exception("Este jogo não está cadastrado");
+
+            entidadeJogo.Nome = jogo.Nome;
+            entidadeJogo.Produtora = jogo.Produtora;
+            entidadeJogo.Preco = jogo.Preco;
+
+            await _jogoRepository.Atualizar(entidadeJogo);
+        }
+
+        public async Task Atualizar(Guid id, double preco)
+        {
+            var entidadeJogo = await _jogoRepository.Obter(id);
+
+            if (entidadeJogo == null)
+                throw new System.Exception("Este jogo não está cadastrado");
+
+            entidadeJogo.Preco = preco;
+
+            await _jogoRepository.Atualizar(entidadeJogo);
+        }
+
+        public async Task<JogoViewModel> Inserir(JogoInputModel jogo)
+        {
+            var entidadeJogo = await _jogoRepository.Obter(jogo.Nome, jogo.Produtora);
+
+            if (entidadeJogo.Count > 0)
+                throw new System.Exception("Este jogo já está cadastrado");
+
+            var jogoInsert = new Jogo
+            {
+                Id = Guid.NewGuid(),
+                Nome = jogo.Nome,
+                Produtora = jogo.Produtora,
+                Preco = jogo.Preco
+            };
+
+            await _jogoRepository.Inserir(jogoInsert);
+
+            return new JogoViewModel
+            {
+                Id = jogoInsert.Id,
+                Nome = jogo.Nome,
+                Produtora = jogo.Produtora,
+                Preco = jogo.Preco
+            };
+        }
+
+
+
+        public async Task<JogoViewModel> Obter(Guid id)
+        {
+            var jogo = await _jogoRepository.Obter(id);
+
+            if (jogo == null)
+                return null;
+
+            return new JogoViewModel
             {
                 Id = jogo.Id,
                 Nome = jogo.Nome,
                 Produtora = jogo.Produtora,
                 Preco = jogo.Preco
-            })
+            };
         }
 
-
-        public Task Atualizar(Guid id, JogoInputModel jogo)
+        public async Task Remover(Guid id)
         {
-            throw new NotImplementedException();
-        }
+            var jogo = await _jogoRepository.Obter(id);
 
-        public Task Atualizar(Guid id, double preco)
-        {
-            throw new NotImplementedException();
-        }
+            if (jogo == null)
+                throw new System.Exception("Este jogo não está cadastrado");
 
-        public Task<JogoViewModel> Inserir(JogoInputModel jogo)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
-        public Task<JogoViewModel> Obter(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task Remover(Guid id)
-        {
-            throw new NotImplementedException();
+            await _jogoRepository.Remover(id);
         }
     }
 }

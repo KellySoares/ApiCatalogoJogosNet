@@ -12,6 +12,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
+using ApiCatalogoJogos.Controllers.V1;
+using ApiCatalogoJogos.Repository;
+using ApiCatalogoJogos.Services;
+
 namespace ApiCatalogoJogos
 {
     public class Startup
